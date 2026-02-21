@@ -1,0 +1,264 @@
+# sv.vaa.edu-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Portal</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background:#f0f2f7;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#0d3b66,#1d6fa5);
+  color:white;
+  padding:25px 20px;
+  text-align:center;
+}
+
+.avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:4px solid white;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+.student-id{
+  font-size:14px;
+  opacity:0.9;
+}
+
+/* SECTION */
+.section{
+  padding:20px;
+  display:none;
+}
+
+.active{
+  display:block;
+}
+
+/* CARD */
+.card{
+  background:white;
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:18px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.07);
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  text-align:center;
+}
+
+.grid div{
+  background:white;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.06);
+  font-size:13px;
+}
+
+.grid i{
+  font-size:22px;
+  margin-bottom:6px;
+  color:#0d3b66;
+}
+
+/* NEWS */
+.news-item{
+  background:white;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+/* INPUT STYLE (không khung box nặng) */
+input{
+  width:100%;
+  padding:8px;
+  border:none;
+  border-bottom:1px solid #ccc;
+  margin-bottom:12px;
+  font-size:14px;
+  outline:none;
+}
+
+/* BUTTON */
+button{
+  background:#0d3b66;
+  color:white;
+  border:none;
+  padding:10px 15px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  box-shadow:0 -3px 10px rgba(0,0,0,0.1);
+}
+
+.bottom-nav div{
+  text-align:center;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.bottom-nav i{
+  display:block;
+  font-size:18px;
+  margin-bottom:4px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<div id="home" class="section active">
+
+<div class="header">
+  <input type="file" id="upload" hidden>
+  <img src="https://i.pravatar.cc/150" class="avatar" id="avatar" onclick="document.getElementById('upload').click()">
+  <h3 id="displayName">Xin chào!</h3>
+  <div class="student-id" id="studentId"></div>
+</div>
+
+<div class="card">
+  <h4>Lịch học</h4>
+  <p>Không có lịch học</p>
+</div>
+
+<div class="card">
+  <h4>Chức năng</h4>
+  <div class="grid">
+    <div><i class="fa-solid fa-chart-column"></i>Xem điểm</div>
+    <div><i class="fa-solid fa-money-bill"></i>Học phí</div>
+    <div><i class="fa-solid fa-medal"></i>Thành tích</div>
+    <div><i class="fa-solid fa-file-invoice"></i>Phiếu thu</div>
+    <div><i class="fa-solid fa-book"></i>Chương trình</div>
+    <div><i class="fa-solid fa-calendar"></i>Lịch học</div>
+    <div><i class="fa-solid fa-user-check"></i>Điểm danh</div>
+    <div><i class="fa-solid fa-ellipsis"></i>Khác</div>
+  </div>
+</div>
+
+<div class="card">
+  <h4>Tin tức</h4>
+  <div class="news-item">📢 Thông báo năm học mới</div>
+  <div class="news-item">✈️ Trường hợp tác quốc tế</div>
+  <div class="news-item">🎓 Sinh viên đạt thành tích cao</div>
+</div>
+
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section">
+  <div class="card">
+    <h3>Trang cá nhân</h3>
+
+    <input type="text" id="nameInput" placeholder="Nhập họ tên">
+    <input type="date" id="dobInput">
+
+    <button onclick="saveInfo()">Lưu thay đổi</button>
+
+    <hr>
+
+    <p><b>Mã sinh viên:</b> <span id="profileID"></span></p>
+    <p><b>Họ tên:</b> <span id="profileName"></span></p>
+    <p><b>Ngày sinh:</b> <span id="profileDOB"></span></p>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div onclick="showSection('home')"><i class="fa-solid fa-house"></i>Trang chủ</div>
+  <div onclick="showSection('home')"><i class="fa-solid fa-calendar"></i>Lịch học</div>
+  <div onclick="showSection('home')"><i class="fa-solid fa-user-check"></i>Điểm danh</div>
+  <div onclick="showSection('profile')"><i class="fa-solid fa-user"></i>Cá nhân</div>
+</div>
+
+<script>
+function generateID(){
+  return "SV" + Math.floor(100000 + Math.random()*900000);
+}
+
+function showSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function saveInfo(){
+  const name = document.getElementById("nameInput").value;
+  const dob = document.getElementById("dobInput").value;
+
+  localStorage.setItem("name", name);
+  localStorage.setItem("dob", dob);
+
+  loadData();
+}
+
+function loadData(){
+  let id = localStorage.getItem("studentId");
+  if(!id){
+    id = generateID();
+    localStorage.setItem("studentId", id);
+  }
+
+  document.getElementById("studentId").innerText = "Mã sinh viên: " + id;
+  document.getElementById("profileID").innerText = id;
+
+  let name = localStorage.getItem("name") || "";
+  let dob = localStorage.getItem("dob") || "";
+
+  document.getElementById("displayName").innerText = name ? "Xin chào, " + name : "Xin chào!";
+  document.getElementById("profileName").innerText = name;
+  document.getElementById("profileDOB").innerText = dob;
+
+  document.getElementById("nameInput").value = name;
+  document.getElementById("dobInput").value = dob;
+}
+
+/* upload avatar */
+document.getElementById("upload").addEventListener("change", function(e){
+  const reader = new FileReader();
+  reader.onload = function(){
+    document.getElementById("avatar").src = reader.result;
+    localStorage.setItem("avatar", reader.result);
+  }
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+window.onload = function(){
+  loadData();
+  const savedAvatar = localStorage.getItem("avatar");
+  if(savedAvatar){
+    document.getElementById("avatar").src = savedAvatar;
+  }
+}
+</script>
+
+</body>
+</html>
